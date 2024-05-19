@@ -42,8 +42,25 @@ export const useUserStore = defineStore('user', () => {
         });
     };
 
+    const signup = async (user) => {
+          const response = await axios.post(`${REST_USER_API}/signup`, user, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          })
+          .then(() => {
+            alert('회원가입이 성공적으로 완료되었습니다.');
+            router.push({ name: 'login' });
+          })
+          .catch((error) => {
+            console.error('회원가입 중 오류 발생:', error);
+            alert('회원가입 중 오류가 발생했습니다. 다시 시도해주세요.');
+          })
+    
+      };
+
     return {
-        login, logout, isLoggedIn
+        login, logout, isLoggedIn, signup
     };
 })
 

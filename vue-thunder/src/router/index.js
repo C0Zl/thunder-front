@@ -11,6 +11,8 @@ import UserView from '@/views/UserView.vue';
 
 import Signup from '@/components/user/Signup.vue';
 import Login from '@/components/user/Login.vue';
+import RemainMyThunder from '@/components/mythunder/RemainMyThunder.vue';
+import PastMyThunder from '@/components/mythunder/PastMyThunder.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -49,12 +51,25 @@ const router = createRouter({
       path: '/myThunder',
       name: 'myThunder',
       component: MyThunderView,
+      redirect: { name: 'remain' }, // 기본 경로 설정
+      children: [
+        {
+          path: 'remain',
+          name: 'remain',
+          component: RemainMyThunder
+        },
+        {
+          path: 'past',
+          name: 'past',
+          component: PastMyThunder
+        }
+      ]
     },
     {
       path: '/thunder',
       name: 'thunder',
       component: ThunderView,
-          meta : {showHeader: true}
+      meta : {showHeader: true}
     },
     {
       path: '/user',

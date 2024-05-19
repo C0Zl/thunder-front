@@ -24,7 +24,10 @@
         </div>
         <div class="form-group">
           <label for="favorite">관심 운동</label>
-          <input v-model="favorite" type="text" id="favorite" required placeholder="관심 운동을 입력하세요">
+          <select v-model="favorite" id = "favorite" name="favorite">
+            <option class="option" v-for="(category, index) in categories" :key="index" :value="category.value">{{ category.label }}</option>
+          </select>
+          <!-- <input v-model="favorite" type="text" id="favorite" required placeholder="관심 운동을 입력하세요"> -->
         </div>
         <button type="submit" class="signup-button">회원가입</button>
       </form>
@@ -46,9 +49,25 @@ const defaultImage = new URL('@/assets/profile.png', import.meta.url).href;
 const name = ref('');
 const id = ref('');
 const password = ref('');
-const favorite = ref('');
+const favorite = ref('배드민턴');
 const imageUrl = ref(defaultImage);
 const file = ref(null);
+
+const categories = [
+  { label: '배드민턴', value: '배드민턴' },
+  { label: '농구', value: '농구' },
+  { label: '야구', value: '야구' },
+  { label: '등산', value: '등산' },
+  { label: '러닝', value: '러닝' },
+  { label: '축구/풋살', value: '축구/풋살' },
+  { label: '테니스', value: '테니스' },
+  { label: '탁구', value: '탁구' },
+  { label: '볼링', value: '볼링' },
+  { label: '당구', value: '당구' },
+  { label: '클라이밍', value: '클라이밍' },
+  { label: '사이클링', value: '사이클링' },
+  { label: '기타', value: '기타' }
+];
 
 function onImageChange(event) {
   file.value = event.target.files[0];
@@ -64,17 +83,20 @@ function onImageChange(event) {
 }
 
 const handleSignup = async () => {
-  if (!file.value) {
-    alert('프로필 이미지를 선택하세요.');
-    return;
-  }
+  // if (!file.value) {
+  //   alert('프로필 이미지를 선택하세요.');
+  //   return;
+  // }
 
   const formData = new FormData();
   formData.append('name', name.value);
   formData.append('id', id.value);
   formData.append('password', password.value);
   formData.append('favorite', favorite.value);
-  formData.append('file', file.value);
+
+  if (file.value) {
+    formData.append('file', file.value);
+  }
 
   await store.signup(formData);
 };
@@ -133,7 +155,24 @@ const handleSignup = async () => {
   color: #474646;
 }
 
-input {
+.option {
+  padding-left: 0px;
+}
+
+select {
+  padding: 10px 40px;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 15px;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background: url("data:image/svg+xml;utf8,<svg fill='black' height='38' viewBox='0 0 24 24' width='38' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>") no-repeat right 10px center;
+  background-color: white;
+  text-align-last: center; 
+}
+
+input   {
   width: 100%;
   padding: 10px 40px;
   border: 1px solid #ddd;
@@ -171,4 +210,5 @@ button.signup-button:hover {
 .login-link a:hover {
   text-decoration: underline;
 }
+
 </style>

@@ -18,7 +18,7 @@
     </div>
     <ul class="nav-links">
       <li class="search"><a href="#"><img class="icon" src="../icons/common/searchThunder.png" alt="번개 찾기">번개 찾기</a></li>
-      <li class="my"><a href="#"><img class="icon" src="../icons/common/mythunder.png" alt="내 번개">내 번개</a></li>
+      <li class="my"><RouterLink :to="{name : 'myThunder'}"><img class="icon" src="../icons/common/mythunder.png" alt="내 번개">내 번개</RouterLink></li>
       <li class="friend"><a href="#"><img class="icon" src="../icons/common/friend.png" alt="친구">친구</a></li>
       <li class="album"><a href="#"><img class="icon" src="../icons/common/album.png" alt="사진첩">사진첩</a></li>
     </ul>
