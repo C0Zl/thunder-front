@@ -1,6 +1,6 @@
 <template>
     <div>
-        <!-- <ThunderCreate /> -->
+        <RouterView />
     </div>
 </template>
 
@@ -8,6 +8,6 @@
     import ThunderCreate from '@/components/thunder/ThunderCreate.vue';
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 
 </style>

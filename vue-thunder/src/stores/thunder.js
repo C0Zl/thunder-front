@@ -24,7 +24,7 @@ export const useThunderStore = defineStore('thunder', () => {
   }
 
   function createThunder(thunderData) {
-    const response = axios.post(REST_Thunder_API, thunderData, {
+    const response = axios.post(REST_THUNDER_API, thunderData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
