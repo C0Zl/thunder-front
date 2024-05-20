@@ -52,8 +52,8 @@
         </form>
       </div>
     </div>
-    
     <AddressModal :isModalOpen="isModalOpen" :closeModal="closeModal"/>
+    
   </div>
 </template>
 

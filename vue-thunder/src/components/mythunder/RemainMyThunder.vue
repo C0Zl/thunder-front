@@ -1,15 +1,19 @@
 <template>
   <div class="thunder-container">
       <div class="thunder-list">
-          <div v-for="thunder in thunders" :key="thunder.id" class="thunder-item">
-              <img :src="thunder.imageUrl" alt="thunder image" class="thunder-image" />
+          <div v-for="thunder in store.thunders" :key="thunder.id" class="thunder-item">
+              <img :src="getImageUrl(thunder.imageUrl)" alt="thunder image" class="thunder-image" />
               <div class="thunder-info">
-              <h4>{{ thunder.name }}</h4>
-              <p>{{ thunder.location }}</p>
-              <p>{{ thunder.description }}</p>
+                <div class="category">{{ thunder.category }}</div>
+                <div class="item">
+                  <h4 class="title">{{ thunder.title }}</h4>
+                  <div class="location"><img src="@/components/icons/common/picker.png" style="width: 12px; margin-right: 5px;">{{ thunder.addressName }}</div>
+                </div>
+                <div>{{ thunder.description }}</div>
               </div>
-              <RouterLink :to="{ name: 'thunderDetail', params: { id: thunder.id } }" class="thunder-detail-link">
-              <!-- <img src="@/assets/detail-arrow.png" alt="상세 보기" /> -->
+              <RouterLink :to="{ name: 'thunderDetail', params: {id: thunder.id} }" class="thunder-detail-link">
+                >
+              <!-- <img src="@/assets/detail-arrow.png" alt="상세 보기" /> \ -->
               </RouterLink>
           </div>
       </div>
@@ -17,21 +21,18 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import { onMounted } from 'vue';
+import { useMyThunderStore } from '@/stores/mythunder';
 
-const thunders = ref([]);
+const store = useMyThunderStore();
 
-const fetchThunders = async () => {
-  try {
-    const response = await axios.get('http://localhost:8080/api/thunders/upcoming');
-    thunders.value = response.data;
-  } catch (error) {
-    console.error('Error fetching upcoming thunders:', error);
-  }
+onMounted(() => {
+  store.fetchThunders();
+});
+
+const getImageUrl = (imagePath) => {
+  return new URL(`/src/assets/thunder/thunderDefault.png`, import.meta.url).href;
 };
-
-onMounted(fetchThunders);
 </script>
 
 <style scoped>
@@ -48,10 +49,15 @@ onMounted(fetchThunders);
 .thunder-item {
   display: flex;
   align-items: center;
-  background-color: #f9f9f9;
-  padding: 10px;
-  border-radius: 10px;
+  background-color: #fff;
+  padding: 10px 20px;
+  border-radius: 20px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.thunder-item:hover {
+  transform: translateY(-5px);
 }
 
 .thunder-image {
@@ -59,22 +65,62 @@ onMounted(fetchThunders);
   height: 80px;
   border-radius: 10px;
   margin-right: 20px;
+  object-fit: cover;
 }
 
 .thunder-info {
   flex-grow: 1;
 }
 
-.thunder-info h4 {
+.category {
+  font-size: 14px;
+  color: #aaa;
   margin: 0;
-  font-size: 18px;
 }
 
-.thunder-info p {
+
+.title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.location {
+  display: flex;
+  align-items: center;
   margin: 5px 0;
+  font-size: 16px;
+  color: #666;
+}
+
+.picker-icon {
+  width: 12px;
+  height: 12px;
+  margin-right: 5px;
+}
+
+.description {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #888;
 }
 
 .thunder-detail-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: #ffcc00;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.thunder-detail-link:hover {
+  background-color: #ff9900;
+}
+
+.detail-arrow {
   width: 20px;
   height: 20px;
 }

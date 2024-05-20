@@ -1,6 +1,6 @@
 <template>
     <div>
-        <ThunderCreate />
+        <!-- <ThunderCreate /> -->
     </div>
 </template>
 

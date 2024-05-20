@@ -2,7 +2,6 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios';
 import router from '@/router';
-import Cookies from 'js-cookie'; // js-cookie를 가져오기
 
 const REST_USER_API = 'http://localhost:8080/user';
 
@@ -11,11 +10,11 @@ export const useUserStore = defineStore('user', () => {
     const isLoggedIn = ref(false);
     const user = ref({ id: '', name: '', image: '' });
     
-    const checkLoginStatus = async() => {
+    const checkLoginStatus = () => {
         const userId  = sessionStorage.getItem('loginUser'); // 쿠키에서 토큰을 가져옵니다.
         // console.log(userId )
         if (userId ) {
-            await axios.get(`${REST_USER_API}/loginUser`, {
+            axios.get(`${REST_USER_API}/loginUser`, {
                 headers: {
                     'loginuser': userId,
                 },
@@ -42,8 +41,8 @@ export const useUserStore = defineStore('user', () => {
         }
     };
 
-    const login = async (username, password) => {
-        await axios.post(`${REST_USER_API}/login`, {
+    const login = (username, password) => {
+        axios.post(`${REST_USER_API}/login`, {
             id: username,
             password: password
         }, {
@@ -72,8 +71,8 @@ export const useUserStore = defineStore('user', () => {
         });
     }
 
-    const logout = async () => {
-        await axios.post(`${REST_USER_API}/logout`, {}, {
+    const logout = () => {
+        axios.post(`${REST_USER_API}/logout`, {}, {
             withCredentials: true // 쿠키를 포함한 요청
         })
         .then(() => {
@@ -89,8 +88,8 @@ export const useUserStore = defineStore('user', () => {
         });
     };
 
-    const signup = async (user) => {
-          const response = await axios.post(`${REST_USER_API}/signup`, user, {
+    const signup = (user) => {
+          const response = axios.post(`${REST_USER_API}/signup`, user, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
@@ -100,7 +99,6 @@ export const useUserStore = defineStore('user', () => {
             router.push({ name: 'login' });
           })
           .catch((error) => {
-            console.error('회원가입 중 오류 발생:', error);
             alert('회원가입 중 오류가 발생했습니다. 다시 시도해주세요.');
           })
     

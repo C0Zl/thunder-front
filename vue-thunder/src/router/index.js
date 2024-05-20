@@ -9,10 +9,14 @@ import MyThunderView from '@/views/MyThunderView.vue';
 import ThunderView from '@/views/ThunderView.vue';
 import UserView from '@/views/UserView.vue';
 
+import Map from '@/components/home/Map.vue'
+import List from '@/components/home/List.vue'
 import Signup from '@/components/user/Signup.vue';
 import Login from '@/components/user/Login.vue';
+import ThunderCreate from '@/components/thunder/ThunderCreate.vue';
 import RemainMyThunder from '@/components/mythunder/RemainMyThunder.vue';
 import PastMyThunder from '@/components/mythunder/PastMyThunder.vue';
+import ThunderDetail from '@/components/thunder/ThunderDetail.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,7 +25,19 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
-      meta: { showHeader: true }
+      meta: { showHeader: true },
+      children: [
+        {
+          path: '',
+          name: 'map',
+          component: Map,
+        },
+        {
+          path: 'list',
+          name: 'list',
+          component: List,
+        }
+      ]
     },
     {
       path: '/album',
@@ -69,7 +85,19 @@ const router = createRouter({
       path: '/thunder',
       name: 'thunder',
       component: ThunderView,
-      meta : {showHeader: true}
+      meta : {showHeader: true},
+      children : [
+        {
+          path: 'create',
+          name: 'thunderCreate',
+          component: ThunderCreate,
+        },
+        {
+          path: '{thunderId}',
+          name: 'thunderDetail',
+          component: ThunderDetail
+        },
+      ]
     },
     {
       path: '/user',

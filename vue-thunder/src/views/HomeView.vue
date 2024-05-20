@@ -1,10 +1,16 @@
-<script setup>
-  import ThunderCreate from "@/components/thunder/ThunderCreate.vue";
-</script>
-
 <template>
   <main>
-    <RouterLink :to="{name : 'thunder'}">Thunder</RouterLink>
-    <RouterLink :to="{name : 'user'}">User</RouterLink>
+    <ThunderSearch/>
+    <RouterView/>
   </main>
 </template>
+
+<script setup>
+import Map from '@/components/home/Map.vue';
+import ThunderSearch from '@/components/home/ThunderSearch.vue';
+
+</script>
+
+<style scoped>
+
+</style>
