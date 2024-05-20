@@ -41,7 +41,7 @@
             </div>
             <div class="form-group thunder-location">
               <h4>번개 장소</h4>
-              <input v-model="store.address" class="form-location" type="text" placeholder="주소 검색" @click="openModal">
+              <input :value="formattedAddress(store.address)" class="form-location" type="text" placeholder="주소 검색" @click="openModal" readonly>
             </div>
           </div>
           <div class="form-group">
@@ -146,6 +146,14 @@ function formatDateTime(inputDateTime) {
   minute = minute < 10 ? `0${minute}` : minute;
   second = second < 10 ? `0${second}` : second;
   return `${formattedDate} ${hour}:${minute}:${second}`;
+}
+
+// 선택된 주소 표시 포맷 함수
+function formattedAddress(address) {
+  if (address) {
+    return address.split(" *")[0];
+  }
+  return '';
 }
 </script>
 

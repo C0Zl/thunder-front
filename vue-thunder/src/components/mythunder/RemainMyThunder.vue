@@ -1,19 +1,19 @@
 <template>
-    <div class="thunder-container">
-        <div class="thunder-list">
-            <div v-for="thunder in thunders" :key="thunder.id" class="thunder-item">
-                <img :src="thunder.imageUrl" alt="thunder image" class="thunder-image" />
-                <div class="thunder-info">
-                <h4>{{ thunder.name }}</h4>
-                <p>{{ thunder.location }}</p>
-                <p>{{ thunder.description }}</p>
-                </div>
-                <RouterLink :to="{ name: 'thunderDetail', params: { id: thunder.id } }" class="thunder-detail-link">
-                <img src="@/assets/detail-arrow.png" alt="상세 보기" />
-                </RouterLink>
-            </div>
-        </div>
-    </div>
+  <div class="thunder-container">
+      <div class="thunder-list">
+          <div v-for="thunder in thunders" :key="thunder.id" class="thunder-item">
+              <img :src="thunder.imageUrl" alt="thunder image" class="thunder-image" />
+              <div class="thunder-info">
+              <h4>{{ thunder.name }}</h4>
+              <p>{{ thunder.location }}</p>
+              <p>{{ thunder.description }}</p>
+              </div>
+              <RouterLink :to="{ name: 'thunderDetail', params: { id: thunder.id } }" class="thunder-detail-link">
+              <!-- <img src="@/assets/detail-arrow.png" alt="상세 보기" /> -->
+              </RouterLink>
+          </div>
+      </div>
+  </div>
 </template>
 
 <script setup>

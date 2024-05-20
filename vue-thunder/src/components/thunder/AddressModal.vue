@@ -61,7 +61,7 @@ async function searchAddress() {
 
 function selectAddress(address) {
   const selectedAddress = {
-    address_name: `${address.road_address_name} (${address.place_name})`,
+    address_name: `${address.place_name} (${address.road_address_name}) * ${address.address_name}`,
     y: address.y,
     x: address.x,
   };

@@ -44,7 +44,7 @@ import { useUserStore } from '@/stores/user';
 
 const store = useUserStore();
 
-const defaultImage = new URL('@/assets/profile.png', import.meta.url).href;
+const defaultImage = new URL('@/assets/userProfile/profile.png', import.meta.url).href;
 
 const name = ref('');
 const id = ref('');

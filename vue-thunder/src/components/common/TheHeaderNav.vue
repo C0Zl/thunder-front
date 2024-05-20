@@ -1,8 +1,8 @@
 <template>
   <nav class="sidebar">
     <div class="profile">
-      <img src="@/assets/profile.png" alt="Profile Image" class="profile-img" />
-      <span class="profile-name">롤링썬더</span>
+      <img :src="imageUrl" alt="Profile Image" class="profile-img" />
+      <span v-if="store.isLoggedIn" class="profile-name">{{ store.user.name }}</span>
     </div>
     <a v-if="store.isLoggedIn" href="#" @click.prevent="handleLogout">
       <img src="../icons/common/logout.png" alt="로그아웃" style="width: 15px;">로그아웃
@@ -27,12 +27,28 @@
 
 <script setup>
 import { useUserStore } from '@/stores/user';
+import { computed, onMounted, ref } from 'vue';
 
 const store = useUserStore();
 
 const handleLogout = async () => {
   await store.logout();
 };
+
+// const defaultImage = new URL('../assets/profile.png', import.meta.url).href;
+
+const imageUrl = computed(() => {
+  if (store.isLoggedIn) {
+    return new URL(`/src/assets/userProfile/${store.user.image}`, import.meta.url).href;
+  } else {
+    return new URL('@/assets/userProfile/profile.png', import.meta.url).href;
+    // return new URL('@/assets/thunderDafault.png', import.meta.url).href;
+  }
+});
+
+onMounted(() => {
+  store.checkLoginStatus();
+});
 </script>
   
 <style scoped>
