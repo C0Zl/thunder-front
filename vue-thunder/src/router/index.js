@@ -27,6 +27,7 @@ import FriendThunderList from '@/components/friend/FriendThunderList.vue';
 import BoardRegist from '@/components/board/BoardRegist.vue';
 import BoardUpdate from '@/components/board/BoardUpdate.vue';
 import AlbumList from '@/components/album/AlbumList.vue';
+import MyFriendList from '@/components/friend/MyFriendList.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -109,6 +110,11 @@ const router = createRouter({
       component: FriendView,
       meta: { showHeader: true },
       children: [
+        {
+          path: '',
+          name: 'myFriendList',
+          component: MyFriendList
+        },
         {
           path: 'manage',
           name: 'friendManage',

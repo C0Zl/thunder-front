@@ -15,6 +15,8 @@ export const useThunderStore = defineStore('thunder', () => {
   const address = ref('');
   const latitude = ref('');
   const longitude = ref('');
+  const joinStatus = ref();
+  const joinNum = ref();
 
   function setAddress(newAddress) {
     address.value = newAddress.address_name;
@@ -32,7 +34,6 @@ export const useThunderStore = defineStore('thunder', () => {
     }).then(() => {
       alert('번개가 등록되었습니다')
       router.push({name : 'home'})
-
     }).catch(() => {
       alert('다시 시도해주세요')
     })
@@ -54,12 +55,11 @@ export const useThunderStore = defineStore('thunder', () => {
   const getThunderList = function() {
     axios.get(REST_THUNDER_API)
       .then((res) => {
-        // console.log(res.data);
         thunderList.value = res.data;
         originalThunderList.value = res.data;
       })
       .catch((error) => {
-        console.error('Error fetching thunders:', error);
+        alert('조회 실패, 다시 시도해주세요.')
       });
   };
 
@@ -73,12 +73,11 @@ export const useThunderStore = defineStore('thunder', () => {
       if (thunderResponse.status === 204) {
         thunderList.value = [];
       } else {
-        console.log(condition);
         thunderList.value = thunderResponse.data;
         originalThunderList.value = thunderResponse.data;
       }
     } catch (error) {
-      console.error('Error searching thunder:', error);
+      alert('검색 실패, 다시 시도해주세요.')
       thunderList.value = [];
     }
 
@@ -96,13 +95,12 @@ export const useThunderStore = defineStore('thunder', () => {
           const location = regionData[0];
           regionPoint.value = { x: location.x, y: location.y };
           regionName.value = location.address_name;
-          console.log(location);
         } else {
           alert('검색 결과가 없습니다.');
           return;
         }
       } catch (error) {
-        console.error('Error fetching location data:', error);
+          alert('검색 실패, 다시 시도해주세요.')
         return;
       }
     }
@@ -123,7 +121,6 @@ export const useThunderStore = defineStore('thunder', () => {
     }
 
     thunderList.value = filteredThunders;
-    console.log(thunderList.value);
   };
 
   // 번개 상세보기
@@ -132,9 +129,32 @@ export const useThunderStore = defineStore('thunder', () => {
     try {
       const response = await axios.get(`${REST_THUNDER_API}/${thunderId}`);
       thunder.value = response.data;
-      // console.log(response)
     } catch (error) {
-      console.error('Error fetching thunder detail:', error);
+      alert('번개 상세 조회 실패, 다시 시도해주세요.')
+    }
+  };
+
+    // 로그인 유저가 번개에 이미 참여했는지 판단
+  const checkJoinStatus = async (thunderId) => {
+    try {
+      const response = await axios.get(`${REST_THUNDER_API}/status/${thunderId}`, { withCredentials: true });
+      joinStatus.value = response.data;
+      console.log(response.data)
+      console.log(sessionStorage.getItem("loginUser"))
+      console.log(thunderId)
+    } catch (error) {
+      console.error('There was an error!', error);
+    }
+  };
+
+  // 번개 참여 인원 조회
+  const countJoin = async(thunderId) => {
+    try{
+      const response = await axios.get(`${REST_THUNDER_API}/join/${thunderId}`);
+      joinNum.value = response.data;
+    }
+    catch{
+
     }
   };
 
@@ -154,5 +174,9 @@ export const useThunderStore = defineStore('thunder', () => {
     getThunderList,
     thunder,
     getThunderDetail,
+    countJoin,
+    checkJoinStatus,
+    joinStatus,
+    joinNum,
   };
 });

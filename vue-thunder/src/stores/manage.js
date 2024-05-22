@@ -12,9 +12,10 @@ export const useManageStore = defineStore('manage', () => {
             const response = await axios.put(`${REST_MANAGE_API}/${thunderId}`, updatedData, {
                 withCredentials: true // 세션 정보를 포함한 요청
             });
+            alert('일정을 변경하였습니다.')
             return response.data;
         } catch (error) {
-
+            alert('일정 변경에 실패했습니다.')
         }
     }
 

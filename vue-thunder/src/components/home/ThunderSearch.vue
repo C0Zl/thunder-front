@@ -8,7 +8,7 @@
         <option v-for="(category, index) in categories" :key="index" :value="category.value">{{ category.label }}</option>
       </select>
   
-      <input type="text" class="search-bar" v-model="region" placeholder="위치를 입력하세요" />
+      <input type="text" class="search-bar" v-model="region" placeholder="지역명 또는 동으로 검색해보세요. (ex. 둔산동)" />
       <button class="search-btn" @click="searchAll">검색</button>
     </div>
   </template>
@@ -58,14 +58,14 @@
   </script>
   
   <style scoped>
-  .container {
+   .container {
     display: flex;
     align-items: center;
     gap: 10px;
   }
   
   .btn {
-    background-color: #f7d85f;
+    background-color: #F3D849;
     border: none;
     padding: 10px 20px;
     cursor: pointer;
@@ -85,17 +85,11 @@
   }
   
   .search-btn {
-    background-color: #f7d85f;
+    background-color: #F3D849;
     border: none;
     padding: 10px 20px;
     cursor: pointer;
     border-radius: 10px;
-  }
-
-  .date, 
-  .time {
-    font-family: "Noto Sans KR", sans-serif; /* 원하는 글꼴로 변경 */
-    font-size: 14px; /* 글꼴 크기 조절 */   
   }
   </style>
   

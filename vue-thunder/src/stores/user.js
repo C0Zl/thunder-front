@@ -61,7 +61,7 @@ export const useUserStore = defineStore('user', () => {
 
             alert('로그인 성공');
             isLoggedIn.value = true;
-            router.push({name : 'map'});
+            router.push({name : 'home'});
         })
         .catch((error) => {
             console.log(error)

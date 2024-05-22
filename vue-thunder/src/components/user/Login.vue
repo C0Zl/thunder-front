@@ -2,7 +2,7 @@
   <div id = "container">
     <div id="login-container">
       <div class="login-header">
-        <img src="@/assets/logo.png" alt="Logo Icon" />
+        <img src="@/components/icons/logo.png" alt="Logo Icon" />
       </div>
       <form @submit.prevent="handleLogin">
         <div class="form-group">
