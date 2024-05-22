@@ -20,6 +20,7 @@
   const store = useThunderStore();
   
   const categories = [
+  { label: '종목선택', value: ''},
   { label: '배드민턴', value: '배드민턴' },
   { label: '농구', value: '농구' },
   { label: '야구', value: '야구' },
@@ -39,7 +40,7 @@
   const searchCon = ref({
     date: '',
     time: '',
-    category: '배드민턴', // 기본값을 빈 문자열로 설정
+    category: '', // 기본값을 빈 문자열로 설정
   });
   
   // 지역 검색어
