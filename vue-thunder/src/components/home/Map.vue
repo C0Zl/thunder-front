@@ -2,7 +2,7 @@
     <div>
       <div id="map"></div>
       <button class="map-btn" @click="initMap">내위치</button>
-      <button class="btn" @click="redirectToPage">번개 만들기</button>
+      <RouterLink class="btn" :to="{name : 'thunderCreate'}">번개 만들기</RouterLink>
       <List/>
     </div>
   </template>

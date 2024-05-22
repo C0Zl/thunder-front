@@ -5,11 +5,7 @@
       <input type="time" class="search-bar" v-model="searchCon.time">
   
       <select class="dropdown" v-model="searchCon.category" name="운동 종목">
-        <option value="">운동종목</option>
-        <option value="축구/풋살">축구/풋살</option>
-        <option value="등산">등산</option>
-        <option value="러닝">러닝</option>
-        <!-- 더 많은 카테고리 옵션 추가 -->
+        <option v-for="(category, index) in categories" :key="index" :value="category.value">{{ category.label }}</option>
       </select>
   
       <input type="text" class="search-bar" v-model="region" placeholder="위치를 입력하세요" />
@@ -23,11 +19,27 @@
   
   const store = useThunderStore();
   
+  const categories = [
+  { label: '배드민턴', value: '배드민턴' },
+  { label: '농구', value: '농구' },
+  { label: '야구', value: '야구' },
+  { label: '등산', value: '등산' },
+  { label: '러닝', value: '러닝' },
+  { label: '축구/풋살', value: '축구/풋살' },
+  { label: '테니스', value: '테니스' },
+  { label: '탁구', value: '탁구' },
+  { label: '볼링', value: '볼링' },
+  { label: '당구', value: '당구' },
+  { label: '클라이밍', value: '클라이밍' },
+  { label: '사이클링', value: '사이클링' },
+  { label: '기타', value: '기타' }
+];
+
   // 번개 조건 데이터
   const searchCon = ref({
     date: '',
     time: '',
-    category: '', // 기본값을 빈 문자열로 설정
+    category: '배드민턴', // 기본값을 빈 문자열로 설정
   });
   
   // 지역 검색어
@@ -77,6 +89,12 @@
     padding: 10px 20px;
     cursor: pointer;
     border-radius: 10px;
+  }
+
+  .date, 
+  .time {
+    font-family: "Noto Sans KR", sans-serif; /* 원하는 글꼴로 변경 */
+    font-size: 14px; /* 글꼴 크기 조절 */   
   }
   </style>
   

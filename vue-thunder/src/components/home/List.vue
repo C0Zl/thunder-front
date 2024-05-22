@@ -9,14 +9,14 @@
       <div class="thunder-list">
         <div v-for="thunder in paginatedThunders" :key="thunder.id" class="thunder-item">
           <div class="thunder-header">
-            <img src="../../assets/default_thunder.jpg" alt="Thunder Image" class="thunder-image" />
+            <img :src="getImageUrl(thunder.image)" alt="Thunder Image" class="thunder-image" />
             <div class="thunder-info">
               <div class="thunder-category">{{ thunder.category }}</div>
               <div class="thunder-title">{{ thunder.title }}</div>
               <div class="thunder-dateTime">{{ thunder.dateTime }}</div>
               <div class="thunder-address">{{ trimmedAddress(thunder.addressName) }}</div>
             </div>
-            <RouterLink :to="`/thunder/${thunder.id}`">자세히</RouterLink>
+            <RouterLink :to="{ name: 'thunderDetail', params: { thunderId: thunder.id } }">자세히</RouterLink>
           </div>
         </div>
       </div>
@@ -43,6 +43,16 @@
     store.getThunderList();
   });
   
+  // 이미지 URL 가져오는 함수
+  const getImageUrl = (imageName) => {
+    // 번개 이미지가 없을 경우
+    const defaultImageUrl = new URL(`/src/assets/thunder/thunderDefault.png`, import.meta.url).href;
+    if (imageName) {
+      return new URL(`/src/assets/thunder/${imageName}`, import.meta.url).href;
+    }
+    return defaultImageUrl;
+  };
+
   const paginatedThunders = computed(() => {
     const start = (currentPage.value - 1) * itemsPerPage.value;
     const end = start + itemsPerPage.value;

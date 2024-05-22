@@ -2,7 +2,7 @@
   <nav class="sidebar">
     <div class="profile">
       <img :src="imageUrl" alt="Profile Image" class="profile-img" />
-      <span v-if="store.isLoggedIn" class="profile-name">{{ store.user.name }}</span>
+      <span v-if="store.isLoggedIn" class="profile-name">{{ store.loginUser.name }}</span>
     </div>
     <a v-if="store.isLoggedIn" href="#" @click.prevent="handleLogout">
       <img src="../icons/common/logout.png" alt="로그아웃" style="width: 15px;">로그아웃
@@ -17,10 +17,10 @@
       </RouterLink>
     </div>
     <ul class="nav-links">
-      <li class="search"><a href="#"><img class="icon" src="../icons/common/searchThunder.png" alt="번개 찾기">번개 찾기</a></li>
+      <li class="search"><RouterLink :to="{name : 'home'}"><img class="icon" src="../icons/common/searchThunder.png" alt="번개 찾기">번개 찾기</RouterLink></li>
       <li class="my"><RouterLink :to="{name : 'myThunder'}"><img class="icon" src="../icons/common/mythunder.png" alt="내 번개">내 번개</RouterLink></li>
       <li class="friend"><a href="#"><img class="icon" src="../icons/common/friend.png" alt="친구">친구</a></li>
-      <li class="album"><a href="#"><img class="icon" src="../icons/common/album.png" alt="사진첩">사진첩</a></li>
+      <li class="album"><RouterLink :to="{name : 'album'}"><img class="icon" src="../icons/common/album.png" alt="사진첩">사진첩</RouterLink></li>
     </ul>
   </nav>
 </template>
@@ -39,8 +39,13 @@ const handleLogout = async () => {
 
 const imageUrl = computed(() => {
   if (store.isLoggedIn) {
-    return new URL(`/src/assets/userProfile/${store.user.image}`, import.meta.url).href;
-  } else {
+    // 로그인 되어 있지만, 유저 프로필이 없으면 기본 이미지 제공
+    const defaultManagerImageUrl = new URL(`/src/assets/userProfile/profile.png`, import.meta.url).href;
+    if (store.loginUser.image) {
+      return new URL(`/src/assets/userProfile/${store.loginUser.image}`, import.meta.url).href;
+    }
+    return defaultManagerImageUrl;
+  } else {// 로그인 되지 않은 경우 기본 유저 프로필
     return new URL('@/assets/userProfile/profile.png', import.meta.url).href;
     // return new URL('@/assets/thunderDafault.png', import.meta.url).href;
   }
@@ -49,6 +54,7 @@ const imageUrl = computed(() => {
 onMounted(() => {
   store.checkLoginStatus();
 });
+
 </script>
   
 <style scoped>

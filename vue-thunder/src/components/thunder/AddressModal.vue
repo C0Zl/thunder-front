@@ -3,8 +3,10 @@
     <div class="modal-content">
       <span class="close" @click="closeModal">&times;</span>
       <h2>주소 검색</h2>
-      <input type="text" v-model="keyword" placeholder="키워드를 입력해주세요">
-      <button @click="searchAddress">검색</button>
+      <form @submit.prevent="searchAddress" class="search-form">
+        <input type="text" v-model="keyword" placeholder="키워드를 입력해주세요" class="search-input">
+        <button type="submit" class="search-button">검색</button>
+      </form>
       <div class="results">
         <p v-if="addresses.length === 0 && !searching">키워드로 검색해보세요!</p>
         <ul v-else>
@@ -92,7 +94,6 @@ function selectAddress(address) {
   max-height: 90vh; /* 모달창의 최대 높이 설정 */
   overflow-y: auto;
   border-radius: 20px;
-
 }
 
 .close {
@@ -107,6 +108,34 @@ function selectAddress(address) {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+.search-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  font-size: 16px;
+}
+
+.search-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  background-color: #ffcc00;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.search-button:hover {
+  background-color: #ffbb00;
 }
 
 .results {

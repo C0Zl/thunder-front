@@ -4,7 +4,6 @@ import axios from 'axios';
 import router from '@/router';
 
 const REST_THUNDER_API = `http://localhost:8080/thunder`;
-const REST_USER_API = `http://localhost:8080/user`;
 
 export const useThunderStore = defineStore('thunder', () => {
   const thunderList = ref([]);
@@ -23,6 +22,7 @@ export const useThunderStore = defineStore('thunder', () => {
     longitude.value = newAddress.x;
   }
 
+  // 번개 생성
   function createThunder(thunderData) {
     const response = axios.post(REST_THUNDER_API, thunderData, {
       headers: {
@@ -38,11 +38,23 @@ export const useThunderStore = defineStore('thunder', () => {
     })
   }
 
+  // 번개 삭제
+  const deleteThunder = (thunderId) => {
+    axios.delete(`${REST_THUNDER_API}/my/${thunderId}`, {
+      withCredentials: true 
+    }).then(() => {
+      alert('번개를 나갔습니다.')
+      router.push({name : 'myThunder'})
+    }).catch((error) => {
+      console.log(error)
+    })
+  }
+
   // 전체 번개 조회
   const getThunderList = function() {
     axios.get(REST_THUNDER_API)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         thunderList.value = res.data;
         originalThunderList.value = res.data;
       })
@@ -120,24 +132,12 @@ export const useThunderStore = defineStore('thunder', () => {
     try {
       const response = await axios.get(`${REST_THUNDER_API}/${thunderId}`);
       thunder.value = response.data;
+      // console.log(response)
     } catch (error) {
       console.error('Error fetching thunder detail:', error);
     }
   };
 
-  // 유저 정보 불러오기
-  const user = ref({});
-  const getUserById = async (userId) => {
-    try {
-      const response = await axios.get(`${REST_USER_API}/${userId}`);
-      user.value = response.data;
-      console.log('Fetched user data:', user.value); // user 값을 출력
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-    }
-  };
-
-  
   
   return {
     API_KEY,
@@ -146,7 +146,7 @@ export const useThunderStore = defineStore('thunder', () => {
     longitude,
     setAddress,
     createThunder,
-    
+    deleteThunder,
     thunderList,
     searchThunder,
     regionPoint,
@@ -154,7 +154,5 @@ export const useThunderStore = defineStore('thunder', () => {
     getThunderList,
     thunder,
     getThunderDetail,
-    user,
-    getUserById,
   };
 });

@@ -1,13 +1,13 @@
 <template>
     <div class="thunder-detail">
       <div class="header-image-container">
-        <img src="../../assets/default_thunder.jpg" alt="Thunder Image" class="header-image" />
+        <img :src="thunderImageUrl" alt="Thunder Image" class="header-image" />
       </div>
       <div class="header-content">
-        <h2 class="title">{{ store.thunder.title }}</h2>
-        <p class="category">{{ store.thunder.category }}</p>
+        <h2 class="title">{{ thunderStore.thunder.title }}</h2>
+        <p class="category">{{ thunderStore.thunder.category }}</p>
         <div class="date-location">
-          <span>📅 {{ store.thunder.dateTime }}</span>
+          <span>📅 {{ thunderStore.thunder.dateTime }}</span>
           <span>📍 {{ trimmedAddress }}</span>
         </div>
       </div>
@@ -15,7 +15,7 @@
         <button class="join-btn">번개 참여하기</button>
         <div class="details">
           <h3>소개글</h3>
-          <p>{{ store.thunder.description }}</p>
+          <p>{{ thunderStore.thunder.description }}</p>
         </div>
         <div class="people">
           <div class="members">
@@ -25,16 +25,16 @@
                 <i class="icon-user"></i>
                 <div class="manager">
                   <div class="manager-profile">
-                    <img :src="imageUrl" alt="">
+                    <img :src="managerImageUrl" alt="">
                   </div>
                   <div>
                     <div class="manager-name">
                       <h4>이름</h4>
-                      <p>{{ store.user.name }}</p>
+                      <p>{{ userStore.user.name }}</p>
                     </div>
                     <div class="manager-favor">
                       <h4>선호 운동</h4>
-                      <p>{{ store.user.favorite }}</p>
+                      <p>{{ userStore.user.favorite }}</p>
                     </div>
                   </div>
                 </div>
@@ -45,7 +45,7 @@
             <h3>모집 현황</h3>
             <div class="info">
               <i class="icon-users"></i>
-              <span>3 / {{ store.thunder.scale }}명</span>
+              <span>3 / {{ thunderStore.thunder.scale }}명</span>
             </div>
           </div>
         </div>
@@ -57,27 +57,42 @@
   import { onMounted, computed, ref, watch } from "vue";
   import { useRoute, useRouter } from "vue-router";
   import { useThunderStore } from '@/stores/thunder';
+  import { useUserStore } from "@/stores/user";
   
   const route = useRoute();
-  const store = useThunderStore();
-  
+  const thunderStore = useThunderStore();
+  const userStore = useUserStore();
+
   const trimmedAddress = ref('');
   
-  const imageUrl = computed(() => {
-    return new URL(`/src/assets/userProfile/${store.user.image}`, import.meta.url).href;
-  });                
+  const thunderImageUrl = computed(() => {
+    // 번개 이미지가 없을 경우
+    const defaultImageUrl = new URL(`/src/assets/thunder/background.png`, import.meta.url).href;
+    if (thunderStore.thunder.image) {
+      return new URL(`/src/assets/thunder/${thunderStore.thunder.image}`, import.meta.url).href;
+    }
+    return defaultImageUrl;
+  });  
+  
+  const managerImageUrl = computed(() => {
+    // 매니저 이미지가 없을 경우 기본 유저 프로필
+    const defaultManagerImageUrl = new URL(`/src/assets/userProfile/profile.png`, import.meta.url).href;
+    if (userStore.user.image) {
+      return new URL(`/src/assets/userProfile/${userStore.user.image}`, import.meta.url).href;
+    }
+    return defaultManagerImageUrl;
+  });    
 
   onMounted(async () => {
-    await store.getThunderDetail(route.params.thunderId); // 데이터를 가져올 때까지 기다림
-    console.log(store.thunder.managerId); // 가져온 후에 콘솔 출력
+    await thunderStore.getThunderDetail(route.params.thunderId); // 데이터를 가져올 때까지 기다림
   
-    if (store.thunder.managerId) {
-      store.getUserById(store.thunder.managerId);
+    if (thunderStore.thunder.managerId) {
+      userStore.getUserById(thunderStore.thunder.managerId);
     }
   });
   
   watch(
-    () => store.thunder.addressName,
+    () => thunderStore.thunder.addressName,
     (newAddress) => {
       if (newAddress) {
         trimmedAddress.value = newAddress.split(')')[0] + ')';
@@ -87,10 +102,10 @@
   );
   
   watch(
-    () => store.thunder.managerId,
+    () => thunderStore.thunder.managerId,
     (newManagerId) => {
       if (newManagerId) {
-        store.getUserById(newManagerId);
+        userStore.getUserById(newManagerId);
       }
     }
   );

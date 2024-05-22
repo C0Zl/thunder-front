@@ -8,12 +8,13 @@ const REST_USER_API = 'http://localhost:8080/user';
 export const useUserStore = defineStore('user', () => {
     // 로그인 중인지 체크
     const isLoggedIn = ref(false);
-    const user = ref({ id: '', name: '', image: '' });
+    const loginUser = ref({ id: '', name: '', image: '' });
+    const user = ref({ id: '', name: '', image: '', favorite: '' });
     
     const checkLoginStatus = () => {
         const userId  = sessionStorage.getItem('loginUser'); // 쿠키에서 토큰을 가져옵니다.
-        // console.log(userId )
-        if (userId ) {
+        // console.log(userId)
+        if (userId) {
             axios.get(`${REST_USER_API}/loginUser`, {
                 headers: {
                     'loginuser': userId,
@@ -21,10 +22,11 @@ export const useUserStore = defineStore('user', () => {
                 withCredentials: true // 세션 정보를 포함한 요청
             })
             .then((response) => {
-                isLoggedIn.value = true;
                 // console.log(response)
-                // console.log(response);
-                user.value = response.data
+                isLoggedIn.value = true;
+                // console.log()
+                // console.log(isLoggedIn);
+                loginUser.value = response.data
                 // user.value =  {
                 //     id : response.data.id,
                 //     name : response.data.name,
@@ -39,6 +41,7 @@ export const useUserStore = defineStore('user', () => {
         } else {
             isLoggedIn.value = false;
         }
+        // console.log(isLoggedIn)
     };
 
     const login = (username, password) => {
@@ -58,7 +61,7 @@ export const useUserStore = defineStore('user', () => {
 
             alert('로그인 성공');
             isLoggedIn.value = true;
-            router.push({name : 'home'});
+            router.push({name : 'map'});
         })
         .catch((error) => {
             console.log(error)
@@ -81,7 +84,7 @@ export const useUserStore = defineStore('user', () => {
 
             sessionStorage.removeItem('loginUser'); // Local Storage에서 토큰 삭제
 
-            router.push({name : 'home'})
+            router.push({name : 'map'})
         })
         .catch(() => {
             alert('로그아웃 실패');
@@ -104,8 +107,21 @@ export const useUserStore = defineStore('user', () => {
     
       };
 
+      const getUserById = async (userId) => {
+        try {
+            // console.log('try')
+          const response = await axios.get(`${REST_USER_API}/${userId}`, {
+            timeout: 3000, // 5초 타임아웃 설정
+          });
+          user.value = response.data;
+        //   console.log(user)
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      };
+
     return {
-        login, logout, isLoggedIn, signup, checkLoginStatus, user
+        login, logout, isLoggedIn, signup, checkLoginStatus, user, getUserById, loginUser
     };
 })
 

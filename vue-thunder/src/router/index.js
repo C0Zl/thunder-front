@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import { useUserStore } from '@/stores/user';
 
 import AlbumView from '@/views/AlbumView.vue';
 import BoardView from '@/views/BoardView.vue';
@@ -23,6 +24,9 @@ import CommentList from '@/components/board/CommentList.vue';
 import CommentRegist from '@/components/board/CommentRegist.vue';
 import FriendManage from '@/components/friend/FriendManage.vue';
 import FriendThunderList from '@/components/friend/FriendThunderList.vue';
+import BoardRegist from '@/components/board/BoardRegist.vue';
+import BoardUpdate from '@/components/board/BoardUpdate.vue';
+import AlbumList from '@/components/album/AlbumList.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,6 +36,7 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
       meta: { showHeader: true },
+      redirect: { name: 'map' },
       children: [
         {
           path: '',
@@ -49,16 +54,25 @@ const router = createRouter({
       path: '/album',
       name: 'album',
       component: AlbumView,
-      meta: { showHeader: true }
+      meta: { showHeader: true },
+      redirect: { name: 'albumList' },
+      children: [
+         {
+          path: 'list',
+          name: 'albumList',
+          component: AlbumList,
+         }
+      ]
     },
     {
-      path: '/board',
+      path: '/board/:thunderId',
       name: 'board',
       component: BoardView,
       meta: { showHeader: true },
+      redirect: { name: 'boardList' },
       children: [
         {
-          path: 'list/:thunderId',
+          path: 'list',
           name: 'boardList',
           component: BoardList,
         },
@@ -66,6 +80,16 @@ const router = createRouter({
           path: 'detail/:boardId',
           name: 'boardDetail',
           component: BoardDetail,
+        }, 
+        {
+          path: 'regist',
+          name: 'boardRegist',
+          component: BoardRegist,
+        },
+        {
+          path: 'update/:boardId',
+          name: 'boardUpdate',
+          component: BoardUpdate,
         },
         {
           path: 'comment/list/:boardId',
@@ -98,10 +122,9 @@ const router = createRouter({
       ]
     },
     {
-      path: '/manage',
+      path: '/manage/:thunderId',
       name: 'manage',
       component: ManageView,
-      meta: { showHeader: true }
     },
     {
       path: '/myThunder',
@@ -112,12 +135,12 @@ const router = createRouter({
         {
           path: 'remain',
           name: 'remain',
-          component: RemainMyThunder
+          component: RemainMyThunder,
         },
         {
           path: 'past',
           name: 'past',
-          component: PastMyThunder
+          component: PastMyThunder,
         }
       ]
     },
@@ -125,7 +148,6 @@ const router = createRouter({
       path: '/thunder',
       name: 'thunder',
       component: ThunderView,
-      meta : {showHeader: true},
       children : [
         {
           path: ':thunderId',
@@ -144,23 +166,33 @@ const router = createRouter({
       path: '/user',
       name: 'user',
       component: UserView,
-      meta : {showHeader: false},
+      meta: { showHeader: false },
       children : [
         {
           path : 'signup',
           name : 'signup',
           component : Signup,
-          meta : {showHeader: false}
         },
         {
           path : 'login',
           name : 'login',
           component : Login,
-          meta : {showHeader: false}
         },
       ]
     },
   ]
 })
+
+// // 로그인 안 되어 있을 때 접근 제한
+// router.beforeEach(async (to, from, next) => {
+//   const loginUser = sessionStorage.getItem('loginUser')
+//   if (to.matched.some(record => record.meta.requiresAuth) && !loginUser) {
+//     alert('로그인이 필요합니다.')
+//     next({ name: 'login' });
+//   } else {
+//     next();
+//   }
+// });
+
 
 export default router;

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2><img class="thunder-icon" src="../icons/thunder.png" alt="thunder icon"> 번개 생성</h2>
+    <h2><img class="thunder-icon" src="../icons/common/thunder.png" alt="thunder icon"> 번개 생성</h2>
     <div id="thunder-create-container">
       <div id="thunder-create-box">
         <form @submit.prevent="handleSubmit">
@@ -35,7 +35,7 @@
                 <label for="file-upload-button" class="custom-file-upload">사진 선택</label>
               </div>
             </div>
-            <div class="form-group thunder-schedule">
+            <div class="form-group thunder-Thunder">
               <h4>번개 일정</h4>
               <input v-model="dateTime" class="form-date" type="datetime-local" :min="minDateTime">
             </div>
@@ -89,7 +89,7 @@ const scale = ref(4); // 기본 선택 값을 "4"로 설정
 const description = ref('');
 const dateTime = ref('');
 const chatUrl = ref('');
-const defaultImage = new URL('@/assets/thunderDefault.png', import.meta.url).href;
+const defaultImage = new URL('@/assets/thunder/thunderDefault.png', import.meta.url).href;
 const imageUrl = ref(defaultImage);
 const minDateTime = ref(new Date().toISOString().slice(0, 16));
 
@@ -106,6 +106,7 @@ function closeModal() {
 
 function onImageChange(event) {
   file.value = event.target.files[0];
+  console.log(file.value);
   if (file.value) {
     const reader = new FileReader();
     reader.onload = () => {
@@ -118,6 +119,14 @@ function onImageChange(event) {
 }
 
 function handleSubmit() {
+  const selectedDateTime = new Date(dateTime.value);
+  const currentDateTime = new Date();
+
+  if (selectedDateTime < currentDateTime) {
+    alert('선택한 일정이 현재보다 과거입니다. 다시 선택해주세요.');
+    return;
+  }
+
   const formData = new FormData();
   formData.append('title', title.value);
   formData.append('category', category.value);
@@ -129,23 +138,16 @@ function handleSubmit() {
   formData.append('latitude', store.latitude);
   formData.append('chatUrl', chatUrl.value);
 
+  console.log(file)
   if (file.value) {
     formData.append('file', file.value);
+  } else {
+    const defaultFile = new File([], 'defaultThunder.png');
+    formData.append('file', defaultFile);
   }
 
+  console.log(formData)
   store.createThunder(formData);
-}
-
-function formatDateTime(inputDateTime) {
-  const date = new Date(inputDateTime);
-  const formattedDate = date.toISOString().slice(0, 10);
-  let hour = date.getHours();
-  let minute = date.getMinutes();
-  let second = date.getSeconds();
-  hour = hour < 10 ? `0${hour}` : hour;
-  minute = minute < 10 ? `0${minute}` : minute;
-  second = second < 10 ? `0${second}` : second;
-  return `${formattedDate} ${hour}:${minute}:${second}`;
 }
 
 // 선택된 주소 표시 포맷 함수
@@ -156,8 +158,6 @@ function formattedAddress(address) {
   return '';
 }
 </script>
-
-
 
 <style scoped>
 /* 번개 생성 폼 컨테이너 */
@@ -214,12 +214,15 @@ h4 {
 .form-date,
 .form-time {
   width: 200px;
-  padding: 15px;
+  padding: 12px;
   border: 1px solid #ccc;
   border-radius: 20px;
   background-color: white;
   margin-bottom: 10px;
   margin-right: 50px;
+  font-family: "Noto Sans KR", sans-serif; /* 원하는 글꼴로 변경 */
+  font-size: 14px; /* 글꼴 크기 조절 */
+  color: #888;
 }
 
 /* 공통 입력, 텍스트 영역, 버튼 스타일 */
